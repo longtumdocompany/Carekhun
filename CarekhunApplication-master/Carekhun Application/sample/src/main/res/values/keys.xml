@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="firebase_url">https://aboc-274b1.firebaseio.com</string>
+    <string name="facebook_app_id">1967250823521297</string>
+    <string name="twitter_consumer_key">Dm5NPuXR63SMzZ78tZKPZTOEa</string>
+    <string name="twitter_consumer_secret">529HAu905DgGvpXkp9o3NbB7fxRlziVkuokk7EBgJn1EUZghcF</string>
+</resources>

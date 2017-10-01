@@ -1,0 +1,259 @@
+<resources>
+
+        <!-- AbocControl -->
+        <string name="app_name">Carekhun</string>
+        <string name="none_paired">nonePaired</string>
+        <string name="connect">Connect...</string>
+        <string name="not_suport">not suport</string>
+        <string-array name="comandos" ><item>test</item></string-array>
+
+        <!-- Navigation -->
+        <string name="sign_in">Sign in</string>
+        <string name="inbox">Customer Service Inbox</string>
+        <string name="speechrecognition">Speech Recognition</string>
+        <string name="facedetection">Face Detection</string>
+        <string name="scanpaper">Scan Paper</string>
+        <string name="sent_mail">Sent Mail</string>
+        <string name="iot">Internet of Things</string>
+        <string name="fall_detection">Fall Detection</string>
+        <string name="chat_room">Chat Room</string>
+        <string name="categories">Categories</string>
+        <string name="settings">Settings E-Book</string>
+        <string name="add">Add</string>
+        <string name="search">Search</string>
+        <string name="important">Face Detection</string>
+        <string name="documents">Voice Recognition</string>
+        <string name="open_user_profile">Open user profile</string>
+        <string name="open_settings">Open settings</string>
+
+        <!-- Settings -->
+        <string name="action_settings">Settings</string>
+
+        <!-- Scan Document -->
+        <string name="hello_world">Hello world!</string>
+        <string name="scanning">Scanning</string>
+        <string name="done">Save</string>
+        <string name="scan">Next</string>
+        <string name="cantCrop">Cant crop the image, change the points</string>
+        <string name="ok">Ok</string>
+        <string name="loading">Loading</string>
+        <string name="applying_filter">Applying filter</string>
+        <string name="low_memory">Low Memory</string>
+        <string name="low_memory_message">Your phone is low on memory, you may feel some lags while editing images.</string>
+
+        <!-- Login -->
+        <string name="action_logout">Logout</string>
+        <string name="login_with_facebook">Login with Facebook</string>
+        <string name="login_with_google">Login with Google+</string>
+        <string name="login_with_twitter">Login with Twitter</string>
+        <string name="login_with_password">Login with Password</string>
+        <string name="login_anonymously">Login Anonymously</string>
+
+        <!-- List -->
+        <string name="name">ListViewBaseAdapter</string>
+        <string name="image">Thumbnail</string>
+
+        <!--******************************************** AUTH ************************************************-->
+        <string name="label_google_sign_in">Firebase + Google Sign In</string>
+        <string name="label_facebook_login">Firebase + Facebook Login</string>
+        <string name="label_twitter_login">Firebase + Twitter Login</string>
+        <string name="label_emailpassword">Email/Password Authentication</string>
+        <string name="label_anonymous_auth">Anonymous Authentication</string>
+        <string name="label_phone_auth">Phone Authentication</string>
+        <string name="label_manage_user">Manage User</string>
+
+        <string name="create_account">Create Account</string>
+        <string name="enter_to_main">Enter</string>
+        <string name="sign_out">Sign Out</string>
+        <string name="disconnect">Disconnect</string>
+        <string name="signed_out">Signed Out</string>
+
+        <string name="hint_email">Email</string>
+        <string name="hint_password">Password</string>
+        <string name="hint_name">Name</string>
+        <string name="hint_photo">Photo URL</string>
+
+        <string name="logout">Logout?</string>
+        <string name="anonymous_signin">Anonymous Sign In</string>
+        <string name="account_link">Account Linking</string>
+        <string name="account_link_btn">Link Account</string>
+        <string name="title_provider">User\'s provider</string>
+        <string name="title_profile">User\'s profile</string>
+        <string name="title_update_profile">Update user\'s profile</string>
+        <string name="title_update_email">Update user\'s email</string>
+        <string name="title_update_password">Update user\'s password</string>
+        <string name="title_send_password_reset">Send password reset</string>
+        <string name="title_delete_user">Delete a user</string>
+        <string name="updated">%s updated.</string>
+        <string name="verify">Verify</string>
+
+        <string name="start_phone_auth">Start</string>
+        <string name="verify_phone_auth">Verify</string>
+        <string name="resend_phone_auth">Resend</string>
+        <string name="hint_phone_number">Phone Number</string>
+        <string name="hint_verification_code">Verification Code</string>
+        <string name="status_verification_succeeded">Verification succeeded</string>
+        <string name="status_sign_in_failed">Sign-in failed</string>
+        <string name="instant_validation">(instant validation)</string>
+        <string name="firebase_status_fmt">Firebase User: %s</string>
+
+        <string name="qrcodeMessage">Please scan the QR Code to check the elderly history.</string>
+
+        <!--******************************************** Skip *************************************************-->
+        <string name="app_intro_skip">Skip</string>
+
+        <!--******************************************** CHAT ROOM ********************************************-->
+        <string name="action_leave">Leave</string>
+        <string name="action_send">Send</string>
+        <string name="prompt_message">Message</string>
+        <string name="error_connect">Failed to connect</string>
+
+        <!-- chatMessages -->
+        <string name="message_welcome">Welcome to Socket.IO Chat –</string>
+        <plurals name="message_participants">
+                <item quantity="one">there\'s %d participant</item>
+                <item quantity="other">there are %d participants</item>
+        </plurals>
+        <string name="message_user_joined">%s joined</string>
+        <string name="message_user_left">%s left</string>
+        <string name="user_action_typing">is typing</string>
+
+        <!--******************************************* BLE Sensor ********************************************-->
+        <string name="connect_status_index">Connect Status：</string>
+        <string name="connected">Connected</string>
+        <string name="rssi_tv">Rssi：</string>
+        <string name="height">Height</string>
+        <string name="weight">Weight</string>
+        <string name="confirm">Confirm</string>
+        <string name="cancel">Cancel</string>
+        <string name="steps">Step:</string>
+        <string name="distance">Distance:</string>
+        <string name="calorie">Calories:</string>
+        <string name="sleep">Sleep:</string>
+        <string name="deep">Deep sleep:</string>
+        <string name="light">Light sleep:</string>
+        <string name="awake">Awake:</string>
+        <string name="sync_step">Step sync</string>
+        <string name="sync_sleep">Sleep sync</string>
+        <string name="about_update_app">App Upgrade</string>
+        <string name="update_ble">Firmware Upgrade</string>
+        <string name="read_ble_version">Get BLE version</string>
+        <string name="read_ble_version_first">Please get the BLE version first!</string>
+        <string name="read_step_sleep_status">Get step and sleep status</string>
+        <string name="read_ble_battery">Get battery</string>
+        <string name="set_ble_time">Set time</string>
+        <string name="et_height_hint">cm</string>
+        <string name="et_weight_hint">kg</string>
+        <string name="pull_down_scan_equipment"> Pulldown scann</string>
+        <string name="bracelet_setting">Setting</string>
+        <string name="hour">Hour</string>
+        <string name="minute">Min</string>
+        <string name="zero_count">0 count</string>
+        <string name="count">count</string>
+        <string name="zero_hour_zero_minute">0 h  0 m</string>
+        <string name="kilocalorie">kcal</string>
+        <string name="kilometers">km</string>
+        <string name="zero_kilometers">0 km</string>
+        <string name="zero_kilocalorie">0 kcal</string>
+        <string name="search_device">Search devices</string>
+        <string name="yc_connect_success">Successful connection</string>
+        <string name="yc_connect_faile">Connection failed</string>
+        <string name="yc_connect">Connected</string>
+        <string name="yc_unconnect">Disconnected</string>
+        <string name="unknown_device">Unknown device</string>
+        <string name="YC_Dolen_connecting">Connecting...</string>
+        <string name="YC_Dolen_connect_start">Start connecting</string>
+        <string name="someone_connecting">he Band is connecting,Please wait...</string>
+        <string name="bg_connecting">The Band is connecting,Please wait...</string>
+        <string name="YC_Dolen_disconnect">Disconnect</string>
+        <string name="YC_Dolen_disconnecting">Disconnecting...</string>
+        <string name="yc_bind_state">Binding status</string>
+        <string name="YC_unbinddevice">Available devices found</string>
+        <string name="YC_unfinddevice">Did not find an available Band</string>
+        <string name="not_support_ble">Device does not support Bluetooth4.0</string>
+        <string name="not_open_ble">Please turn on Bluetooth</string>
+        <string name="search_devicing">Searching Band...</string>
+        <string name="details">Detail</string>
+        <string name="refresh">Refresh</string>
+        <string name="second_details">Detail</string>
+        <string name="no_motion_today"> No sports today</string>
+        <string name="the_movement_did_not_meet"> Motion did not meet</string>
+        <string name="assess_have_go">Total</string>
+        <string name="assess_have_burn">Burn</string>
+        <string name="total">total</string>
+        <string name="step">Step</string>
+        <string name="fminute">Min</string>
+        <string name="needless_refresh_ui">Need to update</string>
+        <string name="find_new_version_app">Found that application of the new version, if the update?</string>
+        <string name="find_new_version_ble">Band found a new version is updated?</string>
+        <string name="find_new_ble_version_tip">The new version of the bracelet was found, upgrade!</string>
+        <string name="ble_updatting">Band is updating!</string>
+        <string name="ble_is_newest">Band is the latest version.The current version of the Band：</string>
+        <string name="frequent_access_server">Do not frequently accessed server</string>
+        <string name="server_is_busy">Server is busy, please try again later!</string>
+        <string name="please_open_bluetooth">Please turn on Bluetooth!</string>
+        <string name="sdcarderror">SDCard Exception</string>
+        <string name="ble_updating">Band is updating!</string>
+        <string name="ble_update_successful">Band upgrade is complete</string>
+        <string name="ble_fail_update">The upgrade fails, reconnect the Band and then upgrade!</string>
+        <string name="download_fail">Download Failed</string>
+        <string name="YC_Dolen_update_warn">Update Tips</string>
+        <string name="YC_Dolen_find_new_version">Found a new version is updated?</string>
+        <string name="yes">Yes</string>
+        <string name="no">No</string>
+        <string name="YC_Dolen_downloading">Downloading update, please see the notification bar!</string>
+        <string name="confire_is_network_available">Make sure the network is available.</string>
+        <string name="power_pool">Please upgrade without the bracelet battery with sufficient!</string>
+        <string name="newest_version">It is up to date</string>
+        <string name="not_newest_version">Discovering new version</string>
+        <string name="get_ble_version_fails">Get version fails</string>
+        <string name="set_the_setting_ini_err">"The configuration file does not exist or is invalid!!"</string>
+        <string name="select_file_is_not_img">"The selected file is not img file format, please choose again!!"</string>
+        <string name="suota_update_succeed">"Upgrade has been successful!"</string>
+        <string name="please_connect_bracelet">Please connect Band!</string>
+        <string name="click_to_install">The download is complete, click Install!</string>
+        <string name="fail_download">Download Failed</string>
+
+        <!-- Menu items for SDK -->
+        <string name="menu_connect">Connect</string>
+        <string name="menu_disconnect">Disconnect</string>
+        <string name="menu_scan">Scan</string>
+        <string name="menu_stop">Stop</string>
+        <string name="sedentary_remind">Sedentary Remind</string>
+        <string name="unit">min</string>
+        <string name="open">Open</string>
+        <string name="close">Close</string>
+        <string name="sync_rate">Sync rate</string>
+        <string name="rate_test_start">Start</string>
+        <string name="rate_test_stop">Stop</string>
+        <string name="rate">Rate:</string>
+        <string name="lowest_rate">Lowest：</string>
+        <string name="verage_rate">Verage：</string>
+        <string name="highest_rate">Highest：</string>
+        <string name="metric_system">metric</string>
+        <string name="inch_system">inch</string>
+        <string name="open_channel_ok">Open channel ok</string>
+        <string name="close_channel_ok">Close channel ok</string>
+        <string name="test_channel">Test channel </string>
+        <string name="channel_testting">Channel testting</string>
+        <string name="test_channel_ok">Test channel ok</string>
+        <string name="push_message_content">Push the message content</string>
+        <string name="tip">Tip</string>
+        <string name="set_password_for_band">Please set a password for the band</string>
+        <string name="input_password_for_band">	Input password</string>
+        <string name="input_password_for_band_again">Authentication failed.input again</string>
+        <string name="sync_swim_finish">Swimming data sync is complete</string>
+        <string name="sync_swim">Sync swimming data</string>
+        <string name="swim_stroke_count">Number of strokes:</string>
+        <string name="swim_time">Swimming time:</string>
+        <string name="high_pressure">High pressure:</string>
+        <string name="low_pressure">Low pressure:</string>
+        <string name="sync_pressure">Sync pressure</string>
+        <string name="start_pressure">Start pressure</string>
+        <string name="stop_pressure">Stop pressure</string>
+        <string name="test_pressure_ok">Blood pressure test is complete</string>
+        <string name="sync_pressure_ok">Blood pressure sync is complete</string>
+        <string name="open_alarm_clock">Open Alarm Clock</string>
+        <string name="close_alarm_clock">Close Alarm Clock</string>
+
+</resources>
