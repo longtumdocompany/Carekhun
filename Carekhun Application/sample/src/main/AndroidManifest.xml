@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="co.app.longtumdo.carekhun" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
+    <uses-feature android:name="android.hardware.camera.front"/>
+    <uses-feature android:name="android.hardware.camera.front.autofocus"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />           <!-- USE_CREDENTIALS for Google+ login -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />              <!-- GET_ACCOUNTS -->
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- *************************** Start BLE Sensor ********************************* -->
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" android:required="false" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" android:required="false" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" android:required="false" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:required="false" />
+    <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" android:required="false" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" android:required="false" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" android:required="false" />
+    <uses-permission android:name="android.permission.GET_TASKS" android:required="false" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" android:required="false" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" android:required="false" />
+    <!-- *************************** End BLE Sensor ********************************* -->
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="false" />
+    <!-- ******************************************************************** -->
+
+    <application
+        android:hardwareAccelerated="false"
+        android:name="co.app.longtumdo.carekhun.ChatApplication"
+        android:largeHeap="true"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="co.app.longtumdo.carekhun.MainActivityCareKhun"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Firebase -->
+        <service
+            android:name="co.app.longtumdo.carekhun.FirebaseMessaging">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="co.app.longtumdo.carekhun.FirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <!-- start google plus login -->
+        <activity android:name="com.facebook.FacebookActivity" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <!-- end google plus login -->
+
+        <activity
+            android:name="co.app.longtumdo.carekhun.LoginGoogle"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name="co.app.longtumdo.carekhun.LoginFacebook"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name="co.app.longtumdo.carekhun.LoginOtherAccount"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name="co.app.longtumdo.carekhun.LoginWithPhone"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name="co.app.longtumdo.carekhun.ManageUserActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <!-- Customer Service -->
+        <activity
+            android:name="co.app.longtumdo.carekhun.MainActivityRequestRepair"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <!-- Data of Firebase -->
+        <activity
+            android:name="co.app.longtumdo.carekhun.MainActivityAddFirebaseData"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name="co.app.longtumdo.carekhun.MainActivitySendEmailBackground"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name="co.app.longtumdo.carekhun.MainActivityQRCodeScanner"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <!-- Update Notification of Firebase -->
+        <activity
+            android:name="co.app.longtumdo.carekhun.MainActivityUpdateNotificationFallDetectionFirebaseData"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <!-- Update Data of Firebase -->
+        <activity
+            android:name="co.app.longtumdo.carekhun.MainActivityUpdateAndDeleteFirebaseData"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name="co.app.longtumdo.carekhun.GridViewMainActivity">
+        </activity>
+
+        <activity
+            android:name="co.app.longtumdo.carekhun.IntroSliderCarekhun"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name="co.app.longtumdo.carekhun.MainActivityLogin"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name="co.app.longtumdo.carekhun.ChatMainActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name="co.app.longtumdo.carekhun.ChatLoginActivity"
+            android:label="@string/title_activity_login"
+            android:theme="@style/Theme.AppCompat"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+
+        <!-- *********************** BLE Sensor ********************************* -->
+        <activity
+            android:name="co.app.longtumdo.carekhun.SensorDeviceScanActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".SensorMainActivity"
+            android:launchMode="singleTask" />
+
+        <service
+            android:name="com.yc.peddemo.sdk.BluetoothLeService"
+            android:enabled="true"
+            android:theme="@style/PcmTextAppearance" />
+
+        <service android:name="com.realsil.android.blehub.dfu.DfuService"></service>
+
+        <meta-data
+            android:name="YCAPPKEY"
+            android:value="f0b520cdb42c7103f6683977793ae81c" />
+        <!-- *********************** BLE Sensor ********************************* -->
+
+    </application>
+
+</manifest>

@@ -1,0 +1,26 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="width">750dp</dimen>
+    <dimen name="height">750dp</dimen>
+
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+
+    <dimen name="scanPadding">16dp</dimen>
+    <dimen name="polygonViewCircleWidth">32dp</dimen>
+    <dimen name="polygonViewStrokeWidth">2dp</dimen>
+    <!-- ScanPadding must be half of polygonViewCircleWidth -->
+
+    <dimen name="bottom_bar_padding">15dp</dimen>
+
+    <dimen name="margin_normal">8dp</dimen>
+    <dimen name="margin_large">16dp</dimen>
+    <dimen name="text_size_large">16sp</dimen>
+    <dimen name="margin_small">0dp</dimen>
+    <dimen name="text_size_normal">13sp</dimen>
+    <dimen name="imge_book_detail">80dp</dimen>
+
+    <dimen name="spacing">8dp</dimen>
+</resources>
