@@ -181,7 +181,7 @@ public class SensorDeviceScanActivity extends ListActivity implements DeviceScan
 	public void onInit(int status) {
 		if (status == TextToSpeech.SUCCESS) {
 			tts.setLanguage(new Locale("th"));
-			tts.speak("ระบบตรวจจับอัตราการเต้นของหัวใจ ความดัน และสุขภาพของผู้สูงอายุ", TextToSpeech.QUEUE_FLUSH, null);
+			tts.speak("ระบบตรวจจับอัตราการเต้นของหัวใจ การเดิน การวิ่ง และการนอนหลับของผู้สูงอายุ", TextToSpeech.QUEUE_FLUSH, null);
 		}
 	}
 

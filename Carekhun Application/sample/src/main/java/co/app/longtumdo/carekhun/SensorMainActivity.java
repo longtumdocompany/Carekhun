@@ -62,15 +62,9 @@ import java.util.Map;
 
 public class SensorMainActivity extends AppCompatActivity implements OnClickListener, ICallback, ServiceStatusCallback, OnServerCallbackListener {
 
-	private TextView connect_status, rssi_tv, tv_steps, tv_distance, tv_calorie, tv_sleep, tv_deep, tv_light, tv_awake,
-			tv_rate, tv_lowest_rate, tv_verage_rate, tv_highest_rate;
-
+	private TextView connect_status, rssi_tv, tv_steps, tv_distance, tv_calorie, tv_sleep, tv_deep, tv_light, tv_awake, tv_rate, tv_lowest_rate, tv_verage_rate, tv_highest_rate;
 	private EditText et_height, et_weight, et_sedentary_period;
-
-	private Button btn_confirm, btn_sync_step, btn_sync_sleep,
-			set_ble_time,
-			bt_sedentary_open, bt_sedentary_close, btn_sync_rate,
-			btn_rate_start, btn_rate_stop, unit;
+	private Button btn_confirm, btn_sync_step, btn_sync_sleep, set_ble_time, bt_sedentary_open, bt_sedentary_close, btn_sync_rate, btn_rate_start, btn_rate_stop;
 
 	private DataProcessing mDataProcessing;
 	private SensorCustomProgressDialog mProgressDialog;
@@ -160,8 +154,7 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		//Callback
 		mBLEServiceOperate.setServiceStatusCallback(this);
 
-		// If you do not instantiate the BLEServiceOperate in advance of the search interface,
-		// the following four lines need to be placed on the OnServiceStatus lt
+		//Instantiate the BLEServiceOperate
 		mBluetoothLeService = mBLEServiceOperate.getBleService();
 		if (mBluetoothLeService != null) {
 			mBluetoothLeService.setICallback(this);
@@ -285,8 +278,8 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 			}
 		});
 
-		unit = (Button) findViewById(R.id.unit);
-		unit.setOnClickListener(this);
+//		unit = (Button) findViewById(R.id.unit);
+//		unit.setOnClickListener(this);
 
 	}
 
@@ -1015,27 +1008,27 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 				Toast.makeText(mContext, getString(R.string.disconnect), Toast.LENGTH_SHORT).show();
 			}
 			break;
-		case R.id.unit:
-			boolean ble_connected3 = sp.getBoolean(GlobalVariable.BLE_CONNECTED_SP, false);
-			if (ble_connected3) {
-				if (unit.getText().toString().equals(getResources()
-								.getString(R.string.metric_system))) {
-					editor.putBoolean(GlobalVariable.IS_METRIC_UNIT_SP, true);
-					editor.commit();
-					mWriteCommand.sendUnitToBLE();
-					unit.setText(getResources().getString(R.string.inch_system));
-				} else {
-					editor.putBoolean(GlobalVariable.IS_METRIC_UNIT_SP, false);
-					editor.commit();
-					mWriteCommand.sendUnitToBLE();
-					unit.setText(getResources().getString(
-							R.string.metric_system));
-				}
-			} else {
-				Toast.makeText(mContext, getResources().getString(
-								R.string.please_connect_bracelet), Toast.LENGTH_LONG).show();
-			}
-			break;
+//		case R.id.unit:
+//			boolean ble_connected3 = sp.getBoolean(GlobalVariable.BLE_CONNECTED_SP, false);
+//			if (ble_connected3) {
+//				if (unit.getText().toString().equals(getResources()
+//								.getString(R.string.metric_system))) {
+//					editor.putBoolean(GlobalVariable.IS_METRIC_UNIT_SP, true);
+//					editor.commit();
+//					mWriteCommand.sendUnitToBLE();
+//					unit.setText(getResources().getString(R.string.inch_system));
+//				} else {
+//					editor.putBoolean(GlobalVariable.IS_METRIC_UNIT_SP, false);
+//					editor.commit();
+//					mWriteCommand.sendUnitToBLE();
+//					unit.setText(getResources().getString(
+//							R.string.metric_system));
+//				}
+//			} else {
+//				Toast.makeText(mContext, getResources().getString(
+//								R.string.please_connect_bracelet), Toast.LENGTH_LONG).show();
+//			}
+//			break;
 		default:
 			break;
 		}
