@@ -69,10 +69,7 @@
 
 ## Firebase Database
 
-- Fall Detection
-![img](https://github.com/longtumdocompany/Carekhun/blob/master/ScreenCaptureCareKhun/Firebase-1.jpg)
-
-- Elderly Profile
+- Fall Detection/Elderly Profile/Health Care Data
 ![img](https://github.com/longtumdocompany/Carekhun/blob/master/ScreenCaptureCareKhun/Firebase-2.jpg)
 
 ## Benefit or value derived from the concept.
