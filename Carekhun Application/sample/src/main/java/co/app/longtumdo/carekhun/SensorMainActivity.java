@@ -31,7 +31,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.client.Firebase;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.yc.peddemo.sdk.BLEServiceOperate;
@@ -118,7 +117,6 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 	private BLEServiceOperate mBLEServiceOperate;
 	private BluetoothLeService mBluetoothLeService;
 
-	// caicai add for sdk
 	public static final String EXTRAS_DEVICE_NAME = "device_name";
 	public static final String EXTRAS_DEVICE_ADDRESS = "device_address";
 	private final int CONNECTED = 1;
@@ -142,10 +140,11 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 	private int high_pressure, low_pressure;
 	private int tempBloodPressureStatus;
 
-	//*******************************
+	//*******************************Insert to Firebase**********************************
 	public int rssi;
 	public String distance;
 	public int calories;
+	//***********************************************************************************
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -153,34 +152,52 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		setContentView(R.layout.sensor_activity_main);
 
 		mContext = getApplicationContext();
+
+		//SP
 		sp = mContext.getSharedPreferences(GlobalVariable.SettingSP, 0);
 		editor = sp.edit();
+
+		//SQL
 		mySQLOperate = new UTESQLOperate(mContext);
+
+		//Operate Service
 		mBLEServiceOperate = BLEServiceOperate.getInstance(mContext);
+
+		//Callback
 		mBLEServiceOperate.setServiceStatusCallback(this);
 
-		// If you do not instantiate the BLEServiceOperate in advance of the search interface, the following four lines need to be placed on the OnServiceStatuslt
+		// If you do not instantiate the BLEServiceOperate in advance of the search interface,
+		// the following four lines need to be placed on the OnServiceStatus lt
 		mBluetoothLeService = mBLEServiceOperate.getBleService();
 		if (mBluetoothLeService != null) {
 			mBluetoothLeService.setICallback(this);
 		}
 
+		//Receiver
 		mRegisterReceiver();
 		mfindViewById();
 
+		//Write Command to Weareable
 		mWriteCommand = WriteCommandToBLE.getInstance(mContext);
+
+		//Update
 		mUpdates = Updates.getInstance(mContext);
-		mUpdates.setHandler(mHandler);							// Get the upgrade operation information
+		mUpdates.setHandler(mHandler);
 		mUpdates.registerBroadcastReceiver();
 		mUpdates.setOnServerCallbackListener(this);
 		Log.d("onServerDiscorver", "MainActivity_onCreate   mUpdates  =" + mUpdates);
 
 		Intent intent = getIntent();
 		mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
+
+		//Mac Address
 		mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+
+		//Connect
 		mBLEServiceOperate.connect(mDeviceAddress);
 		CURRENT_STATUS = CONNECTING;
 
+		//Swim
 		upDateTodaySwimData();
 	}
 
@@ -192,22 +209,37 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 	}
 
 	private void mfindViewById() {
+
+		//ความสูง/น้ำหนัก
 		et_height = (EditText) findViewById(R.id.et_height);
 		et_weight = (EditText) findViewById(R.id.et_weight);
+
 		et_sedentary_period = (EditText) findViewById(R.id.et_sedentary_period);
+
+		//Connect
 		connect_status = (TextView) findViewById(R.id.connect_status);
+
+		//Rssi
 		rssi_tv = (TextView) findViewById(R.id.rssi_tv);
+
+		//ข้อมูลการเดิน/การวิ่ง
 //		tv_steps = (TextView) findViewById(R.id.tv_steps);
 		tv_distance = (TextView) findViewById(R.id.tv_distance);
 		tv_calorie = (TextView) findViewById(R.id.tv_calorie);
+
+		//ข้อมูลการนอน
 		tv_sleep = (TextView) findViewById(R.id.tv_sleep);
 		tv_deep = (TextView) findViewById(R.id.tv_deep);
 		tv_light = (TextView) findViewById(R.id.tv_light);
 		tv_awake = (TextView) findViewById(R.id.tv_awake);
+
+		//ข้อมูลอัตราการเต้นของหัวใจ
 		tv_rate = (TextView) findViewById(R.id.tv_rate);
 		tv_lowest_rate = (TextView) findViewById(R.id.tv_lowest_rate);
 		tv_verage_rate = (TextView) findViewById(R.id.tv_verage_rate);
 		tv_highest_rate = (TextView) findViewById(R.id.tv_highest_rate);
+
+		//ปุ่ม
 		show_result = (TextView) findViewById(R.id.show_result);
 		btn_confirm = (Button) findViewById(R.id.btn_confirm);
 		bt_sedentary_open = (Button) findViewById(R.id.bt_sedentary_open);
@@ -217,6 +249,8 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		btn_sync_rate = (Button) findViewById(R.id.btn_sync_rate);
 		btn_rate_start = (Button) findViewById(R.id.btn_rate_start);
 		btn_rate_stop = (Button) findViewById(R.id.btn_rate_stop);
+
+		//Listener
 		btn_confirm.setOnClickListener(this);
 		bt_sedentary_open.setOnClickListener(this);
 		bt_sedentary_close.setOnClickListener(this);
@@ -225,58 +259,68 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		btn_sync_rate.setOnClickListener(this);
 		btn_rate_start.setOnClickListener(this);
 		btn_rate_stop.setOnClickListener(this);
+
+		//การอ่านค่า Version
 		read_ble_version = (Button) findViewById(R.id.read_ble_version);
 		read_ble_version.setOnClickListener(this);
+
 		read_ble_battery = (Button) findViewById(R.id.read_ble_battery);
 		read_ble_battery.setOnClickListener(this);
+
 		set_ble_time = (Button) findViewById(R.id.set_ble_time);
 		set_ble_time.setOnClickListener(this);
+
 		update_ble = (Button) findViewById(R.id.update_ble);
 		update_ble.setOnClickListener(this);
+
+		//ตั้งค่าคามสูงและน้ำหนัก
 		et_height.setText(sp.getString(GlobalVariable.PERSONAGE_HEIGHT, "175"));
 		et_weight.setText(sp.getString(GlobalVariable.PERSONAGE_WEIGHT, "60"));
 
+		//Processing
 		mDataProcessing = DataProcessing.getInstance(mContext);
-
 		mDataProcessing.setOnStepChangeListener(mOnStepChangeListener);
 		mDataProcessing.setOnSleepChangeListener(mOnSleepChangeListener);
 		mDataProcessing.setOnRateListener(mOnRateListener);
 		mDataProcessing.setOnBloodPressureListener(mOnBloodPressureListener);
+		Log.d("onStepHandler", "main_mDataProcessing =" + mDataProcessing);
 
+		//Open Alarm
 		Button open_alarm = (Button) findViewById(R.id.open_alarm);
 		open_alarm.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				mWriteCommand.sendToSetAlarmCommand(1, GlobalVariable.EVERYDAY,
-						16, 25, true);
+				mWriteCommand.sendToSetAlarmCommand(1, GlobalVariable.EVERYDAY, 16, 25, true);
 			}
 		});
+
+		//Close Alarm
 		Button close_alarm = (Button) findViewById(R.id.close_alarm);
 		close_alarm.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				mWriteCommand.sendToSetAlarmCommand(1, GlobalVariable.EVERYDAY,
-						16, 23, false);
+				mWriteCommand.sendToSetAlarmCommand(1, GlobalVariable.EVERYDAY, 16, 23, false);
 			}
 		});
 
-		Log.d("onStepHandler", "main_mDataProcessing =" + mDataProcessing);
-
 		unit = (Button) findViewById(R.id.unit);
 		unit.setOnClickListener(this);
+
 		test_channel = (Button) findViewById(R.id.test_channel);
 		test_channel.setOnClickListener(this);
+
 		push_message_content = (Button) findViewById(R.id.push_message_content);
 		push_message_content.setOnClickListener(this);
 
+		//การว่ายน้ำ
 		btn_sync_swim = (Button) findViewById(R.id.btn_sync_swim);
 		btn_sync_swim.setOnClickListener(this);
+
 //		swim_time = (TextView) findViewById(R.id.swim_time);
 //		swim_stroke_count = (TextView) findViewById(R.id.swim_stroke_count);
 //		swim_calorie = (TextView) findViewById(R.id.swim_calorie);
 
+		//ความดัน
 		tv_low_pressure = (TextView) findViewById(R.id.tv_low_pressure);
 		tv_high_pressure = (TextView) findViewById(R.id.tv_high_pressure);
 		btn_sync_pressure = (Button) findViewById(R.id.btn_sync_pressure);
@@ -288,14 +332,13 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 	}
 
 	/**
-	 * Step monitor, update UI here
+	 * Step monitor การเดินและการวิ่ง
 	 */
 	private StepChangeListener mOnStepChangeListener = new StepChangeListener() {
 
 		@Override
 		public void onStepChange(int steps, float distance, int calories) {
-			Log.d("onStepHandler", "steps =" + steps + ",distance =" + distance
-					+ ",calories =" + calories);
+			Log.d("onStepHandler", "steps =" + steps + ",distance =" + distance + ",calories =" + calories);
 			mSteps = steps;
 			mDistance = distance;
 			mCalories = calories;
@@ -303,8 +346,9 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		}
 
 	};
+
 	/**
-	 * Sleep monitor, update UI here
+	 * Sleep monitor การนอน
 	 */
 	private SleepChangeListener mOnSleepChangeListener = new SleepChangeListener() {
 
@@ -315,6 +359,9 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 
 	};
 
+	/**
+	 * Sleep monitor การเต้นของหัวใจ
+	 */
 	private RateChangeListener mOnRateListener = new RateChangeListener() {
 
 		@Override
@@ -325,6 +372,10 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 			mHandler.sendEmptyMessage(UPDATA_REAL_RATE_MSG);
 		}
 	};
+
+	/**
+	 * Sleep monitor ความดัน
+	 */
 	private BloodPressureChangeListener mOnBloodPressureListener = new BloodPressureChangeListener() {
 
 		@Override
@@ -338,37 +389,49 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		}
 
 	};
+
+	//*******************************Handler Update Process and Message**************************************
 	private Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
+
+			//Sync Weareable
 			case RATE_SYNC_FINISH_MSG:
 				UpdateUpdataRateMainUI(CalendarUtils.getCalendar(0));
 				Toast.makeText(mContext, "Rate sync finish", Toast.LENGTH_LONG).show();
 				break;
+
+			//Update Data Heart Rate
 			case UPDATA_REAL_RATE_MSG:
-				tv_rate.setText(tempRate + "");// Real-time jump
+				tv_rate.setText(tempRate + "");
 				if (tempStatus == GlobalVariable.RATE_TEST_FINISH) {
 					UpdateUpdataRateMainUI(CalendarUtils.getCalendar(0));
 					Toast.makeText(mContext, "Rate test finish", Toast.LENGTH_LONG).show();
 				}
 				break;
+
+			//Get Rssi
 			case GlobalVariable.GET_RSSI_MSG:
 				Bundle bundle = msg.getData();
 				rssi_tv.setText(bundle.getInt(GlobalVariable.EXTRA_RSSI) + "");
 				rssi = bundle.getInt(GlobalVariable.EXTRA_RSSI);
 				break;
+
+			//Update Step
 			case UPDATE_STEP_UI_MSG:
 				updateSteps(mSteps);
 				updateCalories(mCalories);
 				updateDistance(mDistance);
-
-				Log.d("onStepHandler", "mSteps =" + mSteps + ",mDistance ="
-						+ mDistance + ",mCalories =" + mCalories);
+				Log.d("onStepHandler", "mSteps =" + mSteps + ",mDistance =" + mDistance + ",mCalories =" + mCalories);
 				break;
+
+			//Update Sleep Data
 			case UPDATE_SLEEP_UI_MSG:
 				querySleepInfo();
 				Log.d("getSleepInfo", "UPDATE_SLEEP_UI_MSG");
 				break;
+
+			//Update SQL Data
 			case NEW_DAY_MSG:
 				mySQLOperate.updateStepSQL();
 				mySQLOperate.updateSleepSQL();
@@ -376,6 +439,8 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 				mySQLOperate.isDeleteRefreshTable();
 				resetValues();
 				break;
+
+			//Start Progress
 			case GlobalVariable.START_PROGRESS_MSG:
 				Log.i(TAG, "(Boolean) msg.obj=" + (Boolean) msg.obj);
 				isUpdateSuccess = (Boolean) msg.obj;
@@ -383,9 +448,10 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 				startProgressDialog();
 				mHandler.postDelayed(mDialogRunnable, TIME_OUT);
 				break;
+
+			//Download Image
 			case GlobalVariable.DOWNLOAD_IMG_FAIL_MSG:
-				Toast.makeText(SensorMainActivity.this, R.string.download_fail, Toast.LENGTH_LONG)
-						.show();
+				Toast.makeText(SensorMainActivity.this, R.string.download_fail, Toast.LENGTH_LONG).show();
 				if (mProgressDialog != null) {
 					mProgressDialog.dismiss();
 					mProgressDialog = null;
@@ -393,44 +459,47 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 				if (mDialogRunnable != null)
 					mHandler.removeCallbacks(mDialogRunnable);
 				break;
+
+			//Dismiss Update Weareable
 			case GlobalVariable.DISMISS_UPDATE_BLE_DIALOG_MSG:
 				Log.i(TAG, "(Boolean) msg.obj=" + (Boolean) msg.obj);
 				isUpdateSuccess = (Boolean) msg.obj;
 				Log.i(TAG, "BisUpdateSuccess=" + isUpdateSuccess);
+
 				if (mProgressDialog != null) {
 					mProgressDialog.dismiss();
 					mProgressDialog = null;
 				}
+
 				if (mDialogRunnable != null) {
 					mHandler.removeCallbacks(mDialogRunnable);
 				}
 
 				if (isUpdateSuccess) {
-					Toast.makeText(
-							mContext,
-							getResources().getString(
+					Toast.makeText(mContext, getResources().getString(
 									R.string.ble_update_successful), Toast.LENGTH_LONG).show();
 				}
 				break;
+
+			//Server Busy
 			case GlobalVariable.SERVER_IS_BUSY_MSG:
-				Toast.makeText(mContext,
-						getResources().getString(R.string.server_is_busy), Toast.LENGTH_LONG)
-						.show();
+				Toast.makeText(mContext, getResources().getString(R.string.server_is_busy), Toast.LENGTH_LONG).show();
 				break;
+
+			//Disconnect Weareable
 			case DISCONNECT_MSG:
 				connect_status.setText(getString(R.string.disconnect));
 				CURRENT_STATUS = DISCONNECTED;
-				Toast.makeText(mContext, "disconnect or connect falie", Toast.LENGTH_LONG)
-						.show();
+				Toast.makeText(mContext, "disconnect or connect falie", Toast.LENGTH_LONG).show();
 
-				String lastConnectAddr0 = sp.getString(
-						GlobalVariable.LAST_CONNECT_DEVICE_ADDRESS_SP,
-						"00:00:00:00:00:00");
-				boolean connectResute0 = mBLEServiceOperate
-						.connect(lastConnectAddr0);
+				//Set 00:00:00:00:00:00
+				String lastConnectAddr0 = sp.getString(GlobalVariable.LAST_CONNECT_DEVICE_ADDRESS_SP, "00:00:00:00:00:00");
+				boolean connectResute0 = mBLEServiceOperate.connect(lastConnectAddr0);
 				Log.i(TAG, "connectResute0=" + connectResute0);
 
 				break;
+
+			//Connect Weareable
 			case CONNECTED_MSG:
 				connect_status.setText(getString(R.string.connected));
 				mBluetoothLeService.setRssiHandler(mHandler);
@@ -441,7 +510,6 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 							try {
 								Thread.sleep(1000);
 							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 							if (mBluetoothLeService != null) {
@@ -454,7 +522,8 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 				Toast.makeText(mContext, "connected", Toast.LENGTH_LONG).show();
 				break;
 
-			case GlobalVariable.UPDATE_BLE_PROGRESS_MSG: // ** Firmware upgrade progress
+			//Firmware upgrade progress
+			case GlobalVariable.UPDATE_BLE_PROGRESS_MSG:
 				int schedule = msg.arg1;
 				Log.i("zznkey", "schedule =" + schedule);
 				if (mProgressDialog == null) {
@@ -462,68 +531,76 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 				}
 				mProgressDialog.setSchedule(schedule);
 				break;
-			case OPEN_CHANNEL_OK_MSG:// Open the channel OK
+
+			//Open
+			case OPEN_CHANNEL_OK_MSG:
 				test_channel.setText(getResources().getString(
 						R.string.open_channel_ok));
 				resultBuilder.append(getResources().getString(
-						R.string.open_channel_ok)
-						+ ",");
+						R.string.open_channel_ok) + ",");
 				show_result.setText(resultBuilder.toString());
 
-				mWriteCommand.sendAPDUToBLE(WriteCommandToBLE
-						.hexString2Bytes(testKey1));
+				//Command >> APDU เลข Hardware
+				mWriteCommand.sendAPDUToBLE(WriteCommandToBLE.hexString2Bytes(testKey1));
 				break;
-			case CLOSE_CHANNEL_OK_MSG:// Close the channel OK
+
+			//Close Channel
+			case CLOSE_CHANNEL_OK_MSG:
 				test_channel.setText(getResources().getString(
 						R.string.close_channel_ok));
 				resultBuilder.append(getResources().getString(
-						R.string.close_channel_ok)
-						+ ",");
+						R.string.close_channel_ok) + ",");
 				show_result.setText(resultBuilder.toString());
 				break;
-			case TEST_CHANNEL_OK_MSG:// test channel OK
+
+			//Test Channel
+			case TEST_CHANNEL_OK_MSG:
 				test_channel.setText(getResources().getString(
 						R.string.test_channel_ok));
 				resultBuilder.append(getResources().getString(
-						R.string.test_channel_ok)
-						+ ",");
+						R.string.test_channel_ok) + ",");
 				show_result.setText(resultBuilder.toString());
 				mWriteCommand.closeBLEchannel();
 				break;
 
+			//Set Password
 			case SHOW_SET_PASSWORD_MSG:
 				showPasswordDialog(GlobalVariable.PASSWORD_TYPE_SET);
 				break;
+
+			//Input Password
 			case SHOW_INPUT_PASSWORD_MSG:
 				showPasswordDialog(GlobalVariable.PASSWORD_TYPE_INPUT);
 				break;
+
+			//Input Password Again
 			case SHOW_INPUT_PASSWORD_AGAIN_MSG:
 				showPasswordDialog(GlobalVariable.PASSWORD_TYPE_INPUT_AGAIN);
 				break;
+
+			//Update Swim Data Offline
 			case OFFLINE_SWIM_SYNC_OK_MSG:
 				upDateTodaySwimData();
-				Toast.makeText(SensorMainActivity.this,
-						getResources().getString(R.string.sync_swim_finish), Toast.LENGTH_LONG)
-						.show();
+				Toast.makeText(SensorMainActivity.this, getResources().getString(R.string.sync_swim_finish), Toast.LENGTH_LONG).show();
 				break;
 
+			//Update Blood Data Online
 			case UPDATA_REAL_BLOOD_PRESSURE_MSG:
-				tv_low_pressure.setText(low_pressure + "");// Real-time jump
-				tv_high_pressure.setText(high_pressure + "");// Real-time jump
+				tv_low_pressure.setText(low_pressure + "");
+				tv_high_pressure.setText(high_pressure + "");
 				if (tempBloodPressureStatus == GlobalVariable.BLOOD_PRESSURE_TEST_FINISH) {
 					UpdateBloodPressureMainUI(CalendarUtils.getCalendar(0));
-					Toast.makeText(
-							mContext,
-							getResources().getString(R.string.test_pressure_ok),
-							Toast.LENGTH_LONG).show();
+					Toast.makeText(mContext, getResources().getString(R.string.test_pressure_ok), Toast.LENGTH_LONG).show();
 				}
 				break;
+
+			//Update Blood Data Offline
 			case OFFLINE_BLOOD_PRESSURE_SYNC_OK_MSG:
 				UpdateBloodPressureMainUI(CalendarUtils.getCalendar(0));
-				Toast.makeText(SensorMainActivity.this,
-						getResources().getString(R.string.sync_pressure_ok), Toast.LENGTH_LONG)
-						.show();
+				Toast.makeText(SensorMainActivity.this, getResources().getString(R.string.sync_pressure_ok), Toast.LENGTH_LONG).show();
 				break;
+
+			//Server Callback
 			case SERVER_CALL_BACK_OK_MSG:
 				if (mProgressDialog != null) {
 					mProgressDialog.dismiss();
@@ -532,17 +609,15 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 				if (mDialogServerRunnable != null) {
 					mHandler.removeCallbacks(mDialogServerRunnable);
 				}
-				String localVersion = sp.getString(
-						GlobalVariable.IMG_LOCAL_VERSION_NAME_SP, "0");
+				String localVersion = sp.getString(GlobalVariable.IMG_LOCAL_VERSION_NAME_SP, "0");
 				int status = mUpdates.getBLEVersionStatus(localVersion);
 				Log.d(TAG, "Firmware upgrade VersionStatus =" + status);
 				if (status == GlobalVariable.OLD_VERSION_STATUS) {
-					updateBleDialog();// update remind
+					updateBleDialog();
 				} else if (status == GlobalVariable.NEWEST_VERSION_STATUS) {
-					Toast.makeText(mContext,
-							getResources().getString(R.string.ble_is_newest), Toast.LENGTH_LONG)
-							.show();
-				}/*
+					Toast.makeText(mContext, getResources().getString(R.string.ble_is_newest), Toast.LENGTH_LONG).show();
+				}
+				/*
 				 * else if (status == GlobalVariable.FREQUENT_ACCESS_STATUS) {
 				 * Toast.makeText( mContext, getResources().getString(
 				 * R.string.frequent_access_server), 0) .show(); }
@@ -555,22 +630,19 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 	};
 
 	/*
-	 * Get the latest heart rate value, the highest, the lowest, the average heart rate value
+	 * อัตราการเต้นของหัวใจ
 	 */
 	private void UpdateUpdataRateMainUI(String calendar) {
 		UTESQLOperate mySQLOperate = new UTESQLOperate(mContext);
-		RateOneDayInfo mRateOneDayInfo = mySQLOperate
-				.queryRateOneDayMainInfo(calendar);
+		RateOneDayInfo mRateOneDayInfo = mySQLOperate.queryRateOneDayMainInfo(calendar);
 		if (mRateOneDayInfo != null) {
 			int currentRate = mRateOneDayInfo.getCurrentRate();
 			int lowestValue = mRateOneDayInfo.getLowestRate();
 			int averageValue = mRateOneDayInfo.getVerageRate();
 			int highestValue = mRateOneDayInfo.getHighestRate();
 
+			//***************************Initial Firebase Database*********************************
 			DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-
-			//insert to hackathon firebase
-//			Firebase myFirebaseRef = new Firebase("https://hackathon-ae467.firebaseio.com");
 
 			// current_rate.setText(currentRate + "");
 			if (currentRate == 0) {
@@ -578,23 +650,17 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 			} else {
 				tv_rate.setText(currentRate + "");
 
+				//***************************Start Firebase Database*********************************
 				int height = 175;
 				int weight = 60;
 				int sedentaryRemind = 60;
-				//int calories = 0;
 
 				//INSERT DATA TO FIREBASE
 				DatabaseReference usersRef = database.child("hearthRate");
 				Map<String, CareData> users = new HashMap<String, CareData>();
 				users.put("heart_rate", new CareData(height,weight,sedentaryRemind,distance,calories,currentRate,rssi));
 				usersRef.setValue(users);
-
-				//Hack
-//				myFirebaseRef.child("data");
-//				Map<String, CarekhunHack> users1 = new HashMap<String, CarekhunHack>();
-//				users1.put("t0", new CarekhunHack(currentRate));
-//				myFirebaseRef.setValue(users1);
-
+				//***************************End Firebase Database*********************************
 			}
 			if (lowestValue == 0) {
 				tv_lowest_rate.setText("--");
@@ -617,12 +683,11 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 	}
 
 	/*
-	 * Get the test time points and heart rate values for each day
+	 * เรียกดูข้อมูลใน 1 วัน
 	 */
 	private void getOneDayRateinfo(String calendar) {
 		UTESQLOperate mySQLOperate = new UTESQLOperate(mContext);
-		List<RateOneDayInfo> mRateOneDayInfoList = mySQLOperate
-				.queryRateOneDayDetailInfo(calendar);
+		List<RateOneDayInfo> mRateOneDayInfoList = mySQLOperate.queryRateOneDayDetailInfo(calendar);
 		if (mRateOneDayInfoList != null && mRateOneDayInfoList.size() > 0) {
 			int size = mRateOneDayInfoList.size();
 			int[] rateValue = new int[size];
@@ -630,18 +695,15 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 			for (int i = 0; i < size; i++) {
 				rateValue[i] = mRateOneDayInfoList.get(i).getRate();
 				timeArray[i] = mRateOneDayInfoList.get(i).getTime();
-				Log.d(TAG, "rateValue[" + i + "]=" + rateValue[i]
-						+ "timeArray[" + i + "]=" + timeArray[i]);
+				Log.d(TAG, "rateValue[" + i + "]=" + rateValue[i] + "timeArray[" + i + "]=" + timeArray[i]);
 			}
-		} else {
-
 		}
 	}
 
+	//*************************************Start Progress Bar******************************************
 	private void startProgressDialog() {
 		if (mProgressDialog == null) {
-			mProgressDialog = SensorCustomProgressDialog
-					.createDialog(SensorMainActivity.this);
+			mProgressDialog = SensorCustomProgressDialog.createDialog(SensorMainActivity.this);
 			mProgressDialog.setMessage(getResources().getString(
 					R.string.ble_updating));
 			mProgressDialog.setCancelable(false);
@@ -654,7 +716,6 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
 			// mDownloadButton.setText(R.string.suota_update_succeed);
 			if (mProgressDialog != null) {
 				mProgressDialog.dismiss();
@@ -662,17 +723,12 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 			}
 			mHandler.removeCallbacks(mDialogRunnable);
 			if (!isUpdateSuccess) {
-				Toast.makeText(SensorMainActivity.this,
-						getResources().getString(R.string.ble_fail_update), Toast.LENGTH_LONG)
-						.show();
+				Toast.makeText(SensorMainActivity.this, getResources().getString(R.string.ble_fail_update), Toast.LENGTH_LONG).show();
 				mUpdates.clearUpdateSetting();
 			} else {
 				isUpdateSuccess = false;
-				Toast.makeText(
-						SensorMainActivity.this,
-						getResources()
-								.getString(R.string.ble_update_successful), Toast.LENGTH_LONG)
-						.show();
+				Toast.makeText(SensorMainActivity.this, getResources()
+								.getString(R.string.ble_update_successful), Toast.LENGTH_LONG).show();
 			}
 
 		}
@@ -681,24 +737,21 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
 			// mDownloadButton.setText(R.string.suota_update_succeed);
 			if (mProgressDialog != null) {
 				mProgressDialog.dismiss();
 				mProgressDialog = null;
 			}
 			mHandler.removeCallbacks(mDialogServerRunnable);
-			Toast.makeText(SensorMainActivity.this,
-					getResources().getString(R.string.server_is_busy), Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(SensorMainActivity.this, getResources().getString(R.string.server_is_busy), Toast.LENGTH_LONG).show();
 		}
 	};
 
+	//*************************************Update Step การเดินการวิ่ง******************************************
 	private void updateSteps(int steps) {
 		stepDistance = steps - mlastStepValue;
-		Log.d("upDateSteps", "stepDistance =" + stepDistance
-				+ ",lastStepDistance=" + lastStepDistance + ",steps =" + steps);
-		if (stepDistance > 3 || stepDistance < 0) {
+		Log.d("upDateSteps", "stepDistance =" + stepDistance + ",lastStepDistance=" + lastStepDistance + ",steps =" + steps);
+		if (stepDistance > 3 || stepDistance < 0) {			//STEP < 0 หรือ > 3
 			if (tv_distance != null) {
 				if (steps <= 0) {
 //					tv_steps.setText("0");
@@ -708,8 +761,10 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 					Log.d("upDateSteps","steps :"+steps);
 				}
 			}
-		} else {
+		}
 
+		//STEP 0 - 3
+		else {
 			switch (stepDistance) {
 			case 0:
 				switch (lastStepDistance) {
@@ -721,7 +776,6 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 //							try {
 //								Thread.sleep(400);
 //							} catch (InterruptedException e) {
-//								// TODO Auto-generated catch block
 //								e.printStackTrace();
 //							}
 //							tv_steps.setText("" + steps);
@@ -745,7 +799,6 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 //							try {
 //								Thread.sleep(400);
 //							} catch (InterruptedException e) {
-//								// TODO Auto-generated catch block
 //								e.printStackTrace();
 //							}
 //							tv_steps.setText("" + steps);
@@ -760,18 +813,15 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 //							try {
 //								Thread.sleep(200);
 //							} catch (InterruptedException e) {
-//								// TODO Auto-generated catch block
 //								e.printStackTrace();
 //							}
 //							tv_steps.setText("" + (steps - 1));
 //						}
 //					}
 					break;
-
 				default:
 					break;
 				}
-
 				break;
 			case 1:
 //				if (tv_steps != null) {
@@ -783,7 +833,6 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 //				}
 				break;
 			case 2:
-
 //				if (tv_steps != null) {
 //					if (steps <= 0) {
 //						tv_steps.setText("0");
@@ -802,7 +851,6 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 //					}
 //				}
 				break;
-
 			default:
 				break;
 			}
@@ -817,8 +865,9 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 			tv_calorie.setText(mContext.getResources().getString(
 					R.string.zero_kilocalorie));
 		} else {
-			tv_calorie.setText("" + (int) mCalories + " "
-					+ mContext.getResources().getString(R.string.kilocalorie));
+			tv_calorie.setText("" + (int) mCalories + " " + mContext.getResources().getString(R.string.kilocalorie));
+
+			//Save ลง Firebase
 			calories = (int) mCalories;
 		}
 
@@ -828,46 +877,50 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		if (mDistance < 0.01) {
 			tv_distance.setText(mContext.getResources().getString(
 					R.string.zero_kilometers));
+
+			//Save ลง Firebase
 			distance = "0 km";
 
 		} else if (mDistance >= 100) {
-			tv_distance.setText(("" + mDistance).substring(0, 3) + " "
-					+ mContext.getResources().getString(R.string.kilometers));
+			tv_distance.setText(("" + mDistance).substring(0, 3) + " " + mContext.getResources().getString(R.string.kilometers));
+
+			//Save ลง Firebase
 			distance = ("" + mDistance).substring(0, 3) + " " + "km";
 
 		} else {
-			tv_distance.setText(("" + (mDistance + 0.000001f)).substring(0, 4)
-					+ " "
-					+ mContext.getResources().getString(R.string.kilometers));
-			distance = ("" + (mDistance + 0.000001f)).substring(0, 4)
-					+ " "
-					+ mContext.getResources().getString(R.string.kilometers);
+			tv_distance.setText(("" + (mDistance + 0.000001f)).substring(0, 4) + " " + mContext.getResources().getString(R.string.kilometers));
+
+			//Save ลง Firebase
+			distance = ("" + (mDistance + 0.000001f)).substring(0, 4) + " " + mContext.getResources().getString(R.string.kilometers);
 		}
 
 	}
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
-		boolean ble_connecte = sp.getBoolean(GlobalVariable.BLE_CONNECTED_SP,
-				false);
+
+		//เชื่อมต่อและหยุดการเชื่อมต่อ
+		boolean ble_connecte = sp.getBoolean(GlobalVariable.BLE_CONNECTED_SP, false);
 		if (ble_connecte) {
 			connect_status.setText(getString(R.string.connected));
 		} else {
 			connect_status.setText(getString(R.string.disconnect));
 		}
+
+		//Insert Data
 		JudgeNewDayWhenResume();
 
 	}
 
 	private void JudgeNewDayWhenResume() {
 		isFirstOpenAPK = sp.getBoolean(GlobalVariable.FIRST_OPEN_APK, true);
+
 		editor.putBoolean(GlobalVariable.FIRST_OPEN_APK, false);
 		editor.commit();
+
 		lastDay = sp.getInt(GlobalVariable.LAST_DAY_NUMBER_SP, 0);
-		lastDayString = sp.getString(GlobalVariable.LAST_DAY_CALLENDAR_SP,
-				"20101201");
+		lastDayString = sp.getString(GlobalVariable.LAST_DAY_CALLENDAR_SP, "20101201");
 		Calendar c = Calendar.getInstance();
 		currentDay = c.get(Calendar.DAY_OF_YEAR);
 		currentDayString = CalendarUtils.getCalendar(0);
@@ -876,14 +929,14 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 			lastDay = currentDay;
 			lastDayString = currentDayString;
 			editor = sp.edit();
-			editor.putInt(GlobalVariable.LAST_DAY_NUMBER_SP, lastDay);
-			editor.putString(GlobalVariable.LAST_DAY_CALLENDAR_SP,
-					lastDayString);
-			editor.commit();
-		} else {
 
+			editor.putInt(GlobalVariable.LAST_DAY_NUMBER_SP, lastDay);
+			editor.putString(GlobalVariable.LAST_DAY_CALLENDAR_SP, lastDayString);
+			editor.commit();
+
+		} else {
 			if (currentDay != lastDay) {
-				if ((lastDay + 1) == currentDay || currentDay == 1) { // Continuous date
+				if ((lastDay + 1) == currentDay || currentDay == 1) { 		// Continuous date
 					mHandler.sendEmptyMessage(NEW_DAY_MSG);
 				} else {
 					mySQLOperate.insertLastDayStepSQL(lastDayString);
@@ -893,8 +946,7 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 				lastDay = currentDay;
 				lastDayString = currentDayString;
 				editor.putInt(GlobalVariable.LAST_DAY_NUMBER_SP, lastDay);
-				editor.putString(GlobalVariable.LAST_DAY_CALLENDAR_SP,
-						lastDayString);
+				editor.putString(GlobalVariable.LAST_DAY_CALLENDAR_SP, lastDayString);
 				editor.commit();
 			} else {
 				Log.d("b1offline", "currentDay == lastDay");
@@ -903,11 +955,14 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 
 	}
 
+	//************************************Reset Value********************************************
 	private void resetValues() {
 		editor.putInt(GlobalVariable.YC_PED_UNFINISH_HOUR_STEP_SP, 0);
 		editor.putInt(GlobalVariable.YC_PED_UNFINISH_HOUR_VALUE_SP, 0);
 		editor.putInt(GlobalVariable.YC_PED_LAST_HOUR_STEP_SP, 0);
 		editor.commit();
+
+		//***************Set Text*****************
 //		tv_steps.setText("0");
 		tv_calorie.setText(mContext.getResources().getString(
 				R.string.zero_kilocalorie));
@@ -919,33 +974,35 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		tv_light.setText(mContext.getResources().getString(
 				R.string.zero_hour_zero_minute));
 		tv_awake.setText(mContext.getResources().getString(R.string.zero_count));
-
 		tv_rate.setText("--");
 		tv_lowest_rate.setText("--");
 		tv_verage_rate.setText("--");
 		tv_highest_rate.setText("--");
 	}
 
+
+	//*******************************************ON CLICK***********************************************
 	@Override
 	public void onClick(View v) {
-		boolean ble_connecte = sp.getBoolean(GlobalVariable.BLE_CONNECTED_SP,
-				false);
+		boolean ble_connecte = sp.getBoolean(GlobalVariable.BLE_CONNECTED_SP, false);
 		switch (v.getId()) {
+
 		case R.id.btn_confirm:
 			if (ble_connecte) {
 				String height = et_height.getText().toString();
 				String weight = et_weight.getText().toString();
+
+				//Validate
 				if (height.equals("") || weight.equals("")) {
 					Toast.makeText(mContext, "Height or weight can not be empty", Toast.LENGTH_LONG).show();
 				} else {
 
+					//ความสูงและน้ำหนัก
 					int Height = Integer.valueOf(height);
 					int Weight = Integer.valueOf(weight);
-					mWriteCommand.sendStepLenAndWeightToBLE(Height, Weight, 5,
-							10000, true, true, 150);
-					// Set the step size, weight, off screen time 5s, the target number of steps,
-					// lift the door bright switch true to open, false off; the highest heart rate reminder,
-					// true for the open, false off; the last parameter for the highest heart rate reminder
+
+					//Write Command to Weareable
+					mWriteCommand.sendStepLenAndWeightToBLE(Height, Weight, 5, 10000, true, true, 150);
 				}
 			} else {
 				Toast.makeText(mContext, getString(R.string.disconnect), Toast.LENGTH_SHORT).show();
@@ -958,10 +1015,7 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 			} else {
 				int period_time = Integer.valueOf(period);
 				if (period_time < 30) {
-					Toast.makeText(
-							mContext,
-							"Please make sure period_time more than 30 minutes",
-							Toast.LENGTH_LONG).show();
+					Toast.makeText(mContext, "Please make sure period_time more than 30 minutes", Toast.LENGTH_LONG).show();
 				} else {
 					if (ble_connecte) {
 						mWriteCommand.sendSedentaryRemindCommand(GlobalVariable.OPEN_SEDENTARY_REMIND, period_time);
@@ -1065,8 +1119,7 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 			}
 			break;
 		case R.id.unit:
-			boolean ble_connected3 = sp.getBoolean(
-					GlobalVariable.BLE_CONNECTED_SP, false);
+			boolean ble_connected3 = sp.getBoolean(GlobalVariable.BLE_CONNECTED_SP, false);
 			if (ble_connected3) {
 				if (unit.getText().toString().equals(getResources()
 								.getString(R.string.metric_system))) {
@@ -1085,7 +1138,6 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 				Toast.makeText(mContext, getResources().getString(
 								R.string.please_connect_bracelet), Toast.LENGTH_LONG).show();
 			}
-
 			break;
 		case R.id.test_channel:
 			boolean ble_connected4 = sp.getBoolean(GlobalVariable.BLE_CONNECTED_SP, false);
@@ -1155,9 +1207,12 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		}
 	}
 
+
+	//*******************************************KEY DOWN*****************************************
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
+
+		//BLUETOOTH CONNECT
 		if (CURRENT_STATUS == CONNECTING) {
 			AlertDialog.Builder builder = new Builder(this);
 			builder.setMessage("Device connection, forced exit will turn off Bluetooth, confirm?");
@@ -1188,6 +1243,7 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		return super.onKeyDown(keyCode, event);
 	}
 
+	//**********************************************UPDATE VERSION*****************************************
 	private boolean updateBleDialog() {
 
 		final AlertDialog alert = new AlertDialog.Builder(this).setCancelable(false).create();
@@ -1197,8 +1253,7 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		Button btn_yes = (Button) window.findViewById(R.id.btn_yes);
 		Button btn_no = (Button) window.findViewById(R.id.btn_no);
 		TextView update_warn_tv = (TextView) window.findViewById(R.id.update_warn_tv);
-		update_warn_tv.setText(getResources().getString(
-				R.string.find_new_version_ble));
+		update_warn_tv.setText(getResources().getString(R.string.find_new_version_ble));
 
 		btn_yes.setOnClickListener(new OnClickListener() {
 			@Override
@@ -1224,12 +1279,7 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		return false;
 	}
 
-	/**
-	 * Get today sleep detail and update sleep UI ,CalendarUtils.getCalendar (0) stands for today, also can be written as "20141101"
-	 * CalendarUtils.getCalendar (-1) on behalf of yesterday, can also be written as "20141031"
-	 * CalendarUtils.getCalendar (-2) on behalf of the day before yesterday, can also be written as "20141030" and so on
-	 */
-
+	//เรียกข้อมูลการนอน
 	private void querySleepInfo() {
 		SleepTimeInfo sleepTimeInfo = mySQLOperate.querySleepInfo(CalendarUtils.getCalendar(-1), CalendarUtils.getCalendar(0));
 		int deepTime, lightTime, awakeCount, sleepTotalTime;
@@ -1250,13 +1300,16 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 					+ ",timePointArray =" + timePointArray
 					+ ",timePointArray.length =" + timePointArray.length);
 
+			//ชั่วโมง
 			double total_hour = ((float) sleepTotalTime / 60f);
-			DecimalFormat df1 = new DecimalFormat("0.0"); // Reserved 1 decimal, with leading zero
+			DecimalFormat df1 = new DecimalFormat("0.0"); 						// Reserved 1 decimal, with leading zero
 
 			int deep_hour = deepTime / 60;
 			int deep_minute = (deepTime - deep_hour * 60);
+
 			int light_hour = lightTime / 60;
 			int light_minute = (lightTime - light_hour * 60);
+
 			int active_count = awakeCount;
 			String total_hour_str = df1.format(total_hour);
 
@@ -1281,6 +1334,7 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		}
 	}
 
+	//**************************************ฺBLUETOOTH BroadcastReceiver******************************************
 	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
 		@Override
@@ -1326,9 +1380,7 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		mUpdates.unRegisterBroadcastReceiver();
 		try {
 			unregisterReceiver(mReceiver);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+		} catch (Exception e) { e.printStackTrace(); }
 
 		if (mProgressDialog != null) {
 			mProgressDialog.dismiss();
@@ -1348,17 +1400,9 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 			// step snyc complete
 		} else if (status == ICallbackStatus.OFFLINE_SLEEP_SYNC_OK) {
 			// sleep snyc complete
-		} else if (status == ICallbackStatus.SYNC_TIME_OK) {// after set time
-															// finish, then(or
-															// delay 20ms) send
-															// to read
-															// localBleVersion
+		} else if (status == ICallbackStatus.SYNC_TIME_OK) {// after set time finish, then(or delay 20ms) send to read localBleVersion
 															// mWriteCommand.sendToReadBLEVersion();
-		} else if (status == ICallbackStatus.GET_BLE_VERSION_OK) {	// after read
-																	// localBleVersion
-																	// finish,
-																	// then sync
-																	// step
+		} else if (status == ICallbackStatus.GET_BLE_VERSION_OK) {	// after read localBleVersion finish, then sync step
 																	// mWriteCommand.syncAllStepData();
 		} else if (status == ICallbackStatus.DISCONNECT_STATUS) {
 			mHandler.sendEmptyMessage(DISCONNECT_MSG);
@@ -1435,17 +1479,14 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 	}
 
 	@Override
-	public void onCharacteristicWriteCallback(int status) {// add 20170221
-		// Write operation of the system callback, status = 0 for the success of writing, other or no callback that failed
+	public void onCharacteristicWriteCallback(int status) {
 		Log.d(TAG, "Write System callback status = " + status);
 	}
 
 	@Override
 	public void OnServerCallback(int status) {
 		Log.d(TAG, "Server callback OnServerCallback status =" + status);
-
 		mHandler.sendEmptyMessage(SERVER_CALL_BACK_OK_MSG);
-
 	}
 
 	@Override
@@ -1466,9 +1507,7 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 	private String password = "";
 
 	private void showPasswordDialog(final int type) {
-//		Log.d("SensorCustomPasswordDialog", "showPasswordDialog");
 		if (isPasswordDialogShowing) {
-//			Log.d("SensorCustomPasswordDialog", "There is a dialog box that pops up");
 			return;
 		}
 		SensorCustomPasswordDialog.Builder builder = new SensorCustomPasswordDialog.Builder(SensorMainActivity.this, mTextWatcher);
@@ -1476,7 +1515,6 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						if (password.length() == 4) {
-//							Log.d("SensorCustomPasswordDialog", "The password is 4 digits  password =" + password);
 							dialog.dismiss();
 							isPasswordDialogShowing = false;
 							mWriteCommand.sendToSetOrInputPassward(password, type);
@@ -1493,14 +1531,11 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		builder.create().show();
 
 		if (type == GlobalVariable.PASSWORD_TYPE_SET) {
-			builder.setTittle(mContext.getResources().getString(
-					R.string.set_password_for_band));
+			builder.setTittle(mContext.getResources().getString(R.string.set_password_for_band));
 		} else if (type == GlobalVariable.PASSWORD_TYPE_INPUT_AGAIN) {
-			builder.setTittle(mContext.getResources().getString(
-					R.string.input_password_for_band_again));
+			builder.setTittle(mContext.getResources().getString(R.string.input_password_for_band_again));
 		} else {
-			builder.setTittle(mContext.getResources().getString(
-					R.string.input_password_for_band));
+			builder.setTittle(mContext.getResources().getString(R.string.input_password_for_band));
 		}
 		isPasswordDialogShowing = true;
 	}
@@ -1512,14 +1547,10 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		}
 
 		@Override
-		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			// TODO Auto-generated method stub
-		}
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
 		@Override
-		public void afterTextChanged(Editable s) {
-			// TODO Auto-generated method stub
-		}
+		public void afterTextChanged(Editable s) {}
 	};
 
 	private static final String ENABLED_NOTIFICATION_LISTENERS = "enabled_notification_listeners";
@@ -1558,7 +1589,8 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 	};
 
 	/*
-	 * Get one day the latest heart rate, maximum, minimum, average heart rate
+	 * Get one day
+	 * heart rate, maximum, minimum, average heart rate
 	 */
 	private void UpdateBloodPressureMainUI(String calendar) {
 		UTESQLOperate mySQLOperate = new UTESQLOperate(mContext);
@@ -1574,13 +1606,15 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 			}
 			Log.d("MySQLOperate", "highPressure =" + highPressure + ",lowPressure =" + lowPressure);
 			// current_rate.setText(currentRate + "");
+
+			//ความดันสูง = 0
 			if (highPressure == 0) {
 				tv_high_pressure.setText("--");
-
 			} else {
 				tv_high_pressure.setText(highPressure + "");
-
 			}
+
+			//ความดันต่ำ = 0
 			if (lowPressure == 0) {
 				tv_low_pressure.setText("--");
 			} else {
@@ -1588,10 +1622,9 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 			}
 
 		} else {
+			//Set ว่าง
 			tv_high_pressure.setText("--");
 			tv_low_pressure.setText("--");
-
 		}
 	}
-
 }
