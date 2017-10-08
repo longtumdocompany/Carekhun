@@ -177,9 +177,8 @@
 
                             <TextView
                                 android:id="@+id/textView5"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:text="@string/distance" />
 
                             <TextView
@@ -199,9 +198,8 @@
 
                             <TextView
                                 android:id="@+id/textView6"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:text="@string/calorie" />
 
                             <TextView
@@ -255,8 +253,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Sleep"
-                                    android:layout_weight="0.41" />
+                                    android:text="Sleep:" />
 
                                 <TextView
                                     android:id="@+id/tv_sleep"
@@ -275,8 +272,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/deep"
-                                    android:layout_weight="0.24" />
+                                    android:text="@string/deep" />
 
                                 <TextView
                                     android:id="@+id/tv_deep"
@@ -297,7 +293,6 @@
                                     android:id="@+id/textView7"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="0.27"
                                     android:text="@string/light" />
 
                                 <TextView
@@ -318,7 +313,6 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="0.59"
                                     android:text="@string/awake" />
 
                                 <TextView
@@ -423,41 +417,33 @@
             android:orientation="horizontal"
             android:weightSum="1">
 
-            <Button
+            <ImageButton
                 android:id="@+id/set_ble_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/set_ble_time"
-                android:layout_weight="0.55" />
+                android:layout_weight="0.25"
+                app:srcCompat="@drawable/set_time_icon" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn_sync_step"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sync_step"
-                android:layout_weight="0.45" />
+                android:layout_weight="0.25"
+                app:srcCompat="@drawable/step_sync_icon" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <Button
+            <ImageButton
                 android:id="@+id/btn_sync_sleep"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sync_sleep"
-                android:layout_weight="0.51" />
+                android:layout_weight="0.25"
+                app:srcCompat="@drawable/sleep_sync_icon" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn_sync_rate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sync_rate"
-                android:layout_weight="0.49" />
+                android:layout_weight="0.25"
+                app:srcCompat="@drawable/sync_rate_icon" />
 
         </LinearLayout>
 
@@ -467,42 +453,34 @@
                 android:orientation="horizontal"
                 android:weightSum="1">
 
-                <Button
+                <ImageButton
                     android:id="@+id/btn_rate_start"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/rate_test_start"
-                    android:layout_weight="0.53" />
+                    android:layout_weight="0.25"
+                    app:srcCompat="@drawable/start_system_icon" />
 
-                <Button
+                <ImageButton
                     android:id="@+id/btn_rate_stop"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/rate_test_stop"
-                    android:layout_weight="0.47" />
+                    android:layout_weight="0.25"
+                    app:srcCompat="@drawable/stop_system_icon" />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:weightSum="1">
-
-                <Button
+                <ImageButton
                     android:id="@+id/open_alarm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/open_alarm_clock"
-                    android:layout_weight="0.70" />
+                    android:layout_weight="0.25"
+                    app:srcCompat="@drawable/open_alarm_icon" />
 
-                <Button
+                <ImageButton
                     android:id="@+id/close_alarm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/close_alarm_clock"
-                    android:layout_weight="0.30"
-                />
+                    android:layout_weight="0.25"
+                    app:srcCompat="@drawable/close_alarm_icon" />
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

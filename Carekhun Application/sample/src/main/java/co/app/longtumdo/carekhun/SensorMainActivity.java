@@ -28,6 +28,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,7 +65,9 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 
 	private TextView connect_status, rssi_tv, tv_steps, tv_distance, tv_calorie, tv_sleep, tv_deep, tv_light, tv_awake, tv_rate, tv_lowest_rate, tv_verage_rate, tv_highest_rate;
 	private EditText et_height, et_weight, et_sedentary_period;
-	private Button btn_confirm, btn_sync_step, btn_sync_sleep, set_ble_time, bt_sedentary_open, bt_sedentary_close, btn_sync_rate, btn_rate_start, btn_rate_stop;
+	private Button btn_confirm, bt_sedentary_open, bt_sedentary_close;
+
+	private ImageButton set_ble_time, btn_sync_step, btn_sync_sleep, btn_sync_rate, btn_rate_start, btn_rate_stop, open_alarm, close_alarm;
 
 	private DataProcessing mDataProcessing;
 	private SensorCustomProgressDialog mProgressDialog;
@@ -230,11 +233,11 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		btn_confirm = (Button) findViewById(R.id.btn_confirm);
 		bt_sedentary_open = (Button) findViewById(R.id.bt_sedentary_open);
 		bt_sedentary_close = (Button) findViewById(R.id.bt_sedentary_close);
-		btn_sync_step = (Button) findViewById(R.id.btn_sync_step);
-		btn_sync_sleep = (Button) findViewById(R.id.btn_sync_sleep);
-		btn_sync_rate = (Button) findViewById(R.id.btn_sync_rate);
-		btn_rate_start = (Button) findViewById(R.id.btn_rate_start);
-		btn_rate_stop = (Button) findViewById(R.id.btn_rate_stop);
+		btn_sync_step = (ImageButton) findViewById(R.id.btn_sync_step);
+		btn_sync_sleep = (ImageButton) findViewById(R.id.btn_sync_sleep);
+		btn_sync_rate = (ImageButton) findViewById(R.id.btn_sync_rate);
+		btn_rate_start = (ImageButton) findViewById(R.id.btn_rate_start);
+		btn_rate_stop = (ImageButton) findViewById(R.id.btn_rate_stop);
 
 		//Listener
 		btn_confirm.setOnClickListener(this);
@@ -245,7 +248,7 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		btn_sync_rate.setOnClickListener(this);
 		btn_rate_start.setOnClickListener(this);
 		btn_rate_stop.setOnClickListener(this);
-		set_ble_time = (Button) findViewById(R.id.set_ble_time);
+		set_ble_time = (ImageButton) findViewById(R.id.set_ble_time);
 		set_ble_time.setOnClickListener(this);
 
 		//ตั้งค่าคามสูงและน้ำหนัก
@@ -261,7 +264,7 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		Log.d("onStepHandler", "main_mDataProcessing =" + mDataProcessing);
 
 		//Open Alarm
-		Button open_alarm = (Button) findViewById(R.id.open_alarm);
+		ImageButton open_alarm = (ImageButton) findViewById(R.id.open_alarm);
 		open_alarm.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -270,7 +273,7 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		});
 
 		//Close Alarm
-		Button close_alarm = (Button) findViewById(R.id.close_alarm);
+		ImageButton close_alarm = (ImageButton) findViewById(R.id.close_alarm);
 		close_alarm.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
