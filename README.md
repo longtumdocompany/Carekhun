@@ -42,7 +42,7 @@
 
 ![img](https://github.com/longtumdocompany/Carekhun/blob/master/ScreenCaptureCareKhun/10.png)
 
-![img](https://github.com/longtumdocompany/Carekhun/blob/master/ScreenCaptureCareKhun/11.png)
+![img](https://github.com/longtumdocompany/Carekhun/blob/master/ScreenCaptureCareKhun/11.jpg)
 
 ![img](https://github.com/longtumdocompany/Carekhun/blob/master/ScreenCaptureCareKhun/12.png)
 
