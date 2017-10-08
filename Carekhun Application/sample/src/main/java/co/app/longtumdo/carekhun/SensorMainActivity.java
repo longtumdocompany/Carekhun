@@ -62,21 +62,20 @@ import java.util.Map;
 
 public class SensorMainActivity extends AppCompatActivity implements OnClickListener, ICallback, ServiceStatusCallback, OnServerCallbackListener {
 
-	private TextView connect_status, rssi_tv, tv_steps, tv_distance, tv_calorie, tv_sleep, tv_deep, tv_light, tv_awake, show_result,
+	private TextView connect_status, rssi_tv, tv_steps, tv_distance, tv_calorie, tv_sleep, tv_deep, tv_light, tv_awake,
 			tv_rate, tv_lowest_rate, tv_verage_rate, tv_highest_rate;
 
 	private EditText et_height, et_weight, et_sedentary_period;
 
-	private Button btn_confirm, btn_sync_step, btn_sync_sleep, update_ble,
-			read_ble_version, read_ble_battery, set_ble_time,
+	private Button btn_confirm, btn_sync_step, btn_sync_sleep,
+			set_ble_time,
 			bt_sedentary_open, bt_sedentary_close, btn_sync_rate,
-			btn_rate_start, btn_rate_stop, unit, push_message_content;
+			btn_rate_start, btn_rate_stop, unit;
 
 	private DataProcessing mDataProcessing;
 	private SensorCustomProgressDialog mProgressDialog;
 	private UTESQLOperate mySQLOperate;
 
-	// private PedometerUtils mPedometerUtils;
 	private WriteCommandToBLE mWriteCommand;
 	private Context mContext;
 	private SharedPreferences sp;
@@ -130,12 +129,7 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 	private int tempRate = 70;
 	private int tempStatus;
 	private long mExitTime = 0;
-
-	private Button test_channel;
 	private StringBuilder resultBuilder = new StringBuilder();
-
-	private TextView swim_time, swim_stroke_count, swim_calorie, tv_low_pressure, tv_high_pressure;
-	private Button btn_sync_swim, btn_sync_pressure, btn_start_pressure, btn_stop_pressure;
 
 	private int high_pressure, low_pressure;
 	private int tempBloodPressureStatus;
@@ -240,7 +234,6 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		tv_highest_rate = (TextView) findViewById(R.id.tv_highest_rate);
 
 		//ปุ่ม
-		show_result = (TextView) findViewById(R.id.show_result);
 		btn_confirm = (Button) findViewById(R.id.btn_confirm);
 		bt_sedentary_open = (Button) findViewById(R.id.bt_sedentary_open);
 		bt_sedentary_close = (Button) findViewById(R.id.bt_sedentary_close);
@@ -259,19 +252,8 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		btn_sync_rate.setOnClickListener(this);
 		btn_rate_start.setOnClickListener(this);
 		btn_rate_stop.setOnClickListener(this);
-
-		//การอ่านค่า Version
-		read_ble_version = (Button) findViewById(R.id.read_ble_version);
-		read_ble_version.setOnClickListener(this);
-
-		read_ble_battery = (Button) findViewById(R.id.read_ble_battery);
-		read_ble_battery.setOnClickListener(this);
-
 		set_ble_time = (Button) findViewById(R.id.set_ble_time);
 		set_ble_time.setOnClickListener(this);
-
-		update_ble = (Button) findViewById(R.id.update_ble);
-		update_ble.setOnClickListener(this);
 
 		//ตั้งค่าคามสูงและน้ำหนัก
 		et_height.setText(sp.getString(GlobalVariable.PERSONAGE_HEIGHT, "175"));
@@ -306,29 +288,6 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 		unit = (Button) findViewById(R.id.unit);
 		unit.setOnClickListener(this);
 
-		test_channel = (Button) findViewById(R.id.test_channel);
-		test_channel.setOnClickListener(this);
-
-		push_message_content = (Button) findViewById(R.id.push_message_content);
-		push_message_content.setOnClickListener(this);
-
-		//การว่ายน้ำ
-		btn_sync_swim = (Button) findViewById(R.id.btn_sync_swim);
-		btn_sync_swim.setOnClickListener(this);
-
-//		swim_time = (TextView) findViewById(R.id.swim_time);
-//		swim_stroke_count = (TextView) findViewById(R.id.swim_stroke_count);
-//		swim_calorie = (TextView) findViewById(R.id.swim_calorie);
-
-		//ความดัน
-		tv_low_pressure = (TextView) findViewById(R.id.tv_low_pressure);
-		tv_high_pressure = (TextView) findViewById(R.id.tv_high_pressure);
-		btn_sync_pressure = (Button) findViewById(R.id.btn_sync_pressure);
-		btn_start_pressure = (Button) findViewById(R.id.btn_start_pressure);
-		btn_stop_pressure = (Button) findViewById(R.id.btn_stop_pressure);
-		btn_sync_pressure.setOnClickListener(this);
-		btn_start_pressure.setOnClickListener(this);
-		btn_stop_pressure.setOnClickListener(this);
 	}
 
 	/**
@@ -534,11 +493,8 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 
 			//Open
 			case OPEN_CHANNEL_OK_MSG:
-				test_channel.setText(getResources().getString(
-						R.string.open_channel_ok));
 				resultBuilder.append(getResources().getString(
 						R.string.open_channel_ok) + ",");
-				show_result.setText(resultBuilder.toString());
 
 				//Command >> APDU เลข Hardware
 				mWriteCommand.sendAPDUToBLE(WriteCommandToBLE.hexString2Bytes(testKey1));
@@ -546,20 +502,14 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 
 			//Close Channel
 			case CLOSE_CHANNEL_OK_MSG:
-				test_channel.setText(getResources().getString(
-						R.string.close_channel_ok));
 				resultBuilder.append(getResources().getString(
 						R.string.close_channel_ok) + ",");
-				show_result.setText(resultBuilder.toString());
 				break;
 
 			//Test Channel
 			case TEST_CHANNEL_OK_MSG:
-				test_channel.setText(getResources().getString(
-						R.string.test_channel_ok));
 				resultBuilder.append(getResources().getString(
 						R.string.test_channel_ok) + ",");
-				show_result.setText(resultBuilder.toString());
 				mWriteCommand.closeBLEchannel();
 				break;
 
@@ -586,8 +536,6 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 
 			//Update Blood Data Online
 			case UPDATA_REAL_BLOOD_PRESSURE_MSG:
-				tv_low_pressure.setText(low_pressure + "");
-				tv_high_pressure.setText(high_pressure + "");
 				if (tempBloodPressureStatus == GlobalVariable.BLOOD_PRESSURE_TEST_FINISH) {
 					UpdateBloodPressureMainUI(CalendarUtils.getCalendar(0));
 					Toast.makeText(mContext, getResources().getString(R.string.test_pressure_ok), Toast.LENGTH_LONG).show();
@@ -617,11 +565,6 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 				} else if (status == GlobalVariable.NEWEST_VERSION_STATUS) {
 					Toast.makeText(mContext, getResources().getString(R.string.ble_is_newest), Toast.LENGTH_LONG).show();
 				}
-				/*
-				 * else if (status == GlobalVariable.FREQUENT_ACCESS_STATUS) {
-				 * Toast.makeText( mContext, getResources().getString(
-				 * R.string.frequent_access_server), 0) .show(); }
-				 */
 				break;
 			default:
 				break;
@@ -716,7 +659,6 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 
 		@Override
 		public void run() {
-			// mDownloadButton.setText(R.string.suota_update_succeed);
 			if (mProgressDialog != null) {
 				mProgressDialog.dismiss();
 				mProgressDialog = null;
@@ -737,7 +679,6 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 
 		@Override
 		public void run() {
-			// mDownloadButton.setText(R.string.suota_update_succeed);
 			if (mProgressDialog != null) {
 				mProgressDialog.dismiss();
 				mProgressDialog = null;
@@ -1038,7 +979,6 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 			} else {
 				Toast.makeText(mContext, getString(R.string.disconnect), Toast.LENGTH_SHORT).show();
 			}
-
 			break;
 		case R.id.btn_sync_sleep:
 			if (ble_connecte) {
@@ -1068,54 +1008,11 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 				Toast.makeText(mContext, getString(R.string.disconnect), Toast.LENGTH_SHORT).show();
 			}
 			break;
-
-		case R.id.read_ble_version:
-			if (ble_connecte) {
-				mWriteCommand.sendToReadBLEVersion();
-			} else {
-				Toast.makeText(mContext, getString(R.string.disconnect), Toast.LENGTH_SHORT).show();
-			}
-			break;
-		case R.id.read_ble_battery:
-			if (ble_connecte) {
-				mWriteCommand.sendToReadBLEBattery();							// Request to obtain power command
-			} else {
-				Toast.makeText(mContext, getString(R.string.disconnect), Toast.LENGTH_SHORT).show();
-			}
-			break;
 		case R.id.set_ble_time:
 			if (ble_connecte) {
 				mWriteCommand.syncBLETime();
 			} else {
 				Toast.makeText(mContext, getString(R.string.disconnect), Toast.LENGTH_SHORT).show();
-			}
-			break;
-		case R.id.update_ble:
-			boolean ble_connected = sp.getBoolean(GlobalVariable.BLE_CONNECTED_SP, false);
-			if (ble_connected) {
-				mWriteCommand.queryDeviceFearture();
-				if (isNetworkAvailable(mContext)) {
-					String localVersion = sp.getString(GlobalVariable.IMG_LOCAL_VERSION_NAME_SP, "0");
-					if (!localVersion.equals("0")) {
-						int status = mUpdates.accessServerersionStatus(localVersion);
-						if (status == GlobalVariable.FREQUENT_ACCESS_STATUS) {
-							Toast.makeText(mContext, getResources().getString(
-											R.string.frequent_access_server), Toast.LENGTH_LONG).show();
-						} else {
-							startProgressDialog();
-							mHandler.postDelayed(mDialogServerRunnable, TIME_OUT_SERVER);
-						}
-					} else {
-						Toast.makeText(mContext, getResources().getString(
-										R.string.read_ble_version_first), Toast.LENGTH_LONG).show();
-					}
-				} else {
-					Toast.makeText(mContext, getResources().getString(
-									R.string.confire_is_network_available), Toast.LENGTH_LONG).show();
-				}
-			} else {
-				Toast.makeText(mContext, getResources().getString(
-								R.string.please_connect_bracelet), Toast.LENGTH_LONG).show();
 			}
 			break;
 		case R.id.unit:
@@ -1137,69 +1034,6 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 			} else {
 				Toast.makeText(mContext, getResources().getString(
 								R.string.please_connect_bracelet), Toast.LENGTH_LONG).show();
-			}
-			break;
-		case R.id.test_channel:
-			boolean ble_connected4 = sp.getBoolean(GlobalVariable.BLE_CONNECTED_SP, false);
-			if (ble_connected4) {
-				if (test_channel.getText().toString().equals(getResources().getString(R.string.test_channel)) || test_channel.getText().toString().equals(getResources().getString(
-										R.string.test_channel_ok)) || test_channel.getText().toString().equals(getResources().getString(
-										R.string.close_channel_ok))) {
-					resultBuilder = new StringBuilder();
-					mWriteCommand.openBLEchannel();
-				} else {
-					Toast.makeText(mContext, getResources().getString(R.string.channel_testting), Toast.LENGTH_LONG).show();
-				}
-			} else {
-				Toast.makeText(mContext, getResources().getString(
-								R.string.please_connect_bracelet), Toast.LENGTH_LONG).show();
-			}
-
-			break;
-		case R.id.push_message_content:
-			if (ble_connecte) {
-				String pushContent = getResources().getString(
-						R.string.push_message_content);					// Push content
-				mWriteCommand.sendTextToBle(pushContent, GlobalVariable.TYPE_QQ);
-				show_result.setText(pushContent);
-			} else {
-				Toast.makeText(mContext, getString(R.string.disconnect), Toast.LENGTH_SHORT).show();
-			}
-			break;
-		case R.id.btn_sync_swim:
-			if (ble_connecte) {
-				mWriteCommand.syncAllSwimData();
-				show_result.setText(mContext.getResources().getString(
-						R.string.sync_swim));
-			} else {
-				Toast.makeText(mContext, getString(R.string.disconnect), Toast.LENGTH_SHORT).show();
-			}
-			break;
-		case R.id.btn_sync_pressure:
-			if (ble_connecte) {
-				mWriteCommand.syncAllBloodPressureData();
-				show_result.setText(mContext.getResources().getString(
-						R.string.sync_pressure));
-			} else {
-				Toast.makeText(mContext, getString(R.string.disconnect), Toast.LENGTH_SHORT).show();
-			}
-			break;
-		case R.id.btn_start_pressure:
-			if (ble_connecte) {
-				mWriteCommand.sendBloodPressureTestCommand(GlobalVariable.BLOOD_PRESSURE_TEST_START);
-				show_result.setText(mContext.getResources().getString(
-						R.string.start_pressure));
-			} else {
-				Toast.makeText(mContext, getString(R.string.disconnect), Toast.LENGTH_SHORT).show();
-			}
-			break;
-		case R.id.btn_stop_pressure:
-			if (ble_connecte) {
-				mWriteCommand.sendBloodPressureTestCommand(GlobalVariable.BLOOD_PRESSURE_TEST_STOP);
-				show_result.setText(mContext.getResources().getString(
-						R.string.stop_pressure));
-			} else {
-				Toast.makeText(mContext, getString(R.string.disconnect), Toast.LENGTH_SHORT).show();
 			}
 			break;
 		default:
@@ -1342,14 +1176,13 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 			String action = intent.getAction();
 			if (action.equals(GlobalVariable.READ_BLE_VERSION_ACTION)) {
 				String version = intent.getStringExtra(GlobalVariable.INTENT_BLE_VERSION_EXTRA);
-				if (sp.getBoolean(BluetoothLeService.IS_RK_PLATFORM_SP, false)) {
-					show_result.setText("version=" + version + "," + sp.getString(GlobalVariable.PATH_LOCAL_VERSION_NAME_SP, ""));
-				} else {
-					show_result.setText("version=" + version);
-				}
+//				if (sp.getBoolean(BluetoothLeService.IS_RK_PLATFORM_SP, false)) {
+//					show_result.setText("version=" + version + "," + sp.getString(GlobalVariable.PATH_LOCAL_VERSION_NAME_SP, ""));
+//				} else {
+//					show_result.setText("version=" + version);
+//				}
 			} else if (action.equals(GlobalVariable.READ_BATTERY_ACTION)) {
 				int battery = intent.getIntExtra(GlobalVariable.INTENT_BLE_BATTERY_EXTRA, -1);
-				show_result.setText("battery=" + battery);
 			}
 		}
 	};
@@ -1580,12 +1413,7 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 
 	private void upDateTodaySwimData() {
 		// TODO Auto-generated method stub
-		SwimInfo mSwimInfo = mySQLOperate.querySwimData(CalendarUtils.getCalendar(0));// Incoming date, 0 for today, -1 for yesterday, -2 for the day before yesterday. The The The
-		if (mSwimInfo != null) {
-//			swim_time.setText(mSwimInfo.getSwimTime() + "");
-//			swim_stroke_count.setText(mSwimInfo.getSwimStrokeCount() + "");
-//			swim_calorie.setText(mSwimInfo.getCalories() + "");
-		}
+		SwimInfo mSwimInfo = mySQLOperate.querySwimData(CalendarUtils.getCalendar(0));
 	};
 
 	/*
@@ -1605,26 +1433,6 @@ public class SensorMainActivity extends AppCompatActivity implements OnClickList
 				time = mBPVOneDayListInfo.get(i).getBloodPressureTime();
 			}
 			Log.d("MySQLOperate", "highPressure =" + highPressure + ",lowPressure =" + lowPressure);
-			// current_rate.setText(currentRate + "");
-
-			//ความดันสูง = 0
-			if (highPressure == 0) {
-				tv_high_pressure.setText("--");
-			} else {
-				tv_high_pressure.setText(highPressure + "");
-			}
-
-			//ความดันต่ำ = 0
-			if (lowPressure == 0) {
-				tv_low_pressure.setText("--");
-			} else {
-				tv_low_pressure.setText(lowPressure + "");
-			}
-
-		} else {
-			//Set ว่าง
-			tv_high_pressure.setText("--");
-			tv_low_pressure.setText("--");
 		}
 	}
 }
