@@ -66,7 +66,6 @@
 
 ![img](https://github.com/longtumdocompany/Carekhun/blob/master/ScreenCaptureCareKhun/22.png)
 
-![img](https://github.com/longtumdocompany/Carekhun/blob/master/ScreenCaptureCareKhun/23.png)
 
 ## Firebase Database
 
