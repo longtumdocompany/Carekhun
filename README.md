@@ -92,7 +92,7 @@
 
 ## Contact Us... 
 - Website : www.longarndu.com 
-- Landing Page : https://suttipongkull.wixsite.com/abocapplication 
+- Landing Page : https://suttipongkull.wixsite.com/longtumdo
 - Facebook : https://www.facebook.com/longtumdoCompany 
 - Twitter : https://twitter.com/longtumdocomp 
 - Instagram : https://www.instagram.com/longtumdo/ 
