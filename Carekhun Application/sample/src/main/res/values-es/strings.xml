@@ -1,22 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="MissingTranslation">
-
-    <string name="app_name">nDrawer</string>
-    <string name="sign_in" translatable="false">Sign in</string>
-    <string name="inbox" translatable="false">Inbox</string>
-    <string name="starred" translatable="false">Favorito</string>
-    <string name="sent_mail" translatable="false">Mensajes Enviados</string>
-    <string name="drafts" translatable="false">Borradores</string>
-    <string name="categories" translatable="false">Categorías</string>
-    <string name="trash" translatable="false">Papelera</string>
-    <string name="spam" translatable="false">Spam</string>
-    <string name="settings" translatable="false">Configuración</string>
-    <string name="add" translatable="false">Agregar</string>
-    <string name="search" translatable="false">Buscar</string>
-    <string name="important" translatable="false">Importante</string>
-    <string name="documents" translatable="false">Documentos</string>
-    <string name="open_user_profile" translatable="false">Abrir perfil de usuario</string>
-    <string name="open_settings" translatable="false">Abrir configuración</string>
-
 </resources>
