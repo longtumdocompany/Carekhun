@@ -3,7 +3,7 @@
     tools:ignore="MissingTranslation">
 
     <string name="app_name">天天手环SDK</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings" translatable="false">Settings</string>
     <string name="connect_status_index">连接状态：</string>
     <string name="connected">已连接</string>
     <string name="disconnect">未连接</string>
@@ -21,7 +21,7 @@
     <string name="awake">清醒:</string>
     <string name="sync_step">计步同步</string>
     <string name="sync_sleep">睡眠同步</string>
-    <string name="scan">扫描</string>
+    <string name="scan" translatable="false">扫描</string>
     <string name="about_update_app">应用升级</string>
     <string name="read_ble_version">获取蓝牙版本</string>
     <string name="read_ble_version_first">请先获取蓝牙版本，再进行固件升级</string>
